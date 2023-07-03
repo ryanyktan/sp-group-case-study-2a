@@ -1,6 +1,5 @@
 package com.fdmgroup.spgroupcasestudy.service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,13 +13,15 @@ public class ApplianceService {
 	@Autowired
 	ApplianceRepository applianceRepository;
 
-	/*
-	 * Purely for mockito testing
-	 */
+	//Purely for mockito testing
 	public void setApplianceRepository(ApplianceRepository applianceRepository) {
 		this.applianceRepository = applianceRepository;
 	}
 
+	/**
+	 * 
+	 * @return a list of all appliances found in the database.
+	 */
 	public List<Appliance> getAllAppliances() {
 		return applianceRepository.findAll();
 	}
@@ -34,11 +35,8 @@ public class ApplianceService {
 	 * @param status
 	 * @param dateBought
 	 */
-	public void createAppliance(String serialNumber, String brand, String model, String status, LocalDate dateBought) {
-		
-		Appliance newAppliance = new Appliance(serialNumber, brand, model, status, dateBought);
-		applianceRepository.save(newAppliance);
-		
+	public Appliance createAppliance(Appliance appliance) {
+		return applianceRepository.save(appliance);
 	}
 	
 	/**
@@ -65,34 +63,21 @@ public class ApplianceService {
 	/**
 	 * This service functions updates an appliance with new details.
 	 * 
-	 * @param id
-	 * @param serialNumber
-	 * @param brand
-	 * @param model
-	 * @param status
-	 * @param dateBought
+	 * @param appliance The appliance to be updated
 	 * @return false if the existing appliance cannot be found, true if the appliance exists and appliance is updated.
 	 */
-	public boolean updateAppliance(long id, String serialNumber, String brand, String model, 
-			String status, LocalDate dateBought) {
+	public boolean updateAppliance(Appliance appliance) {
 		
-		Optional<Appliance> optionalAppliance = applianceRepository.findById(id); 
-		if (optionalAppliance.isEmpty()) {
+		// Check if the appliance exists in the database
+		if (applianceRepository.findById(appliance.getId()).isEmpty()) {
 			
 			// No Appliance to update
 			return false;
+			
 		} else {
 			
 			//Update appliance in database
-			Appliance app = optionalAppliance.get();
-			
-			app.setSerialNumber(serialNumber);
-			app.setBrand(brand);
-			app.setModel(model);
-			app.setStatus(status);
-			app.setDateBought(dateBought);
-			
-			applianceRepository.save(app);
+			applianceRepository.save(appliance);
 			return true;
 		}
 	}

@@ -30,23 +30,47 @@ class ApplianceServiceTest {
 	}
 
 	@Test
-	void removeAppliance_methodReturnsFalseWhenApplianceDoesNotExist() {
+	void deleteAppliance_methodReturnsFalseWhenApplianceDoesNotExist() {
 		Optional<Appliance> optional = Optional.empty();
 		when(mockAppRepo.findById((long) 1)).thenReturn(optional);
 		
 		ApplianceService appService = new ApplianceService();
 		appService.setApplianceRepository(mockAppRepo);
-		assertEquals(false, appService.removeAppliance(1));
+		assertEquals(false, appService.deleteAppliance(1));
 	}
 	
 	@Test
-	void removeAppliance_methodReturnsTrueWhenApplianceExists() {
+	void deleteAppliance_methodReturnsTrueWhenApplianceExists() {
 		Appliance app = new Appliance();
 		Optional<Appliance> optional = Optional.of(app);
 		when(mockAppRepo.findById((long) 1)).thenReturn(optional);
 		
 		ApplianceService appService = new ApplianceService();
 		appService.setApplianceRepository(mockAppRepo);
-		assertEquals(true, appService.removeAppliance(1));
+		assertEquals(true, appService.deleteAppliance(1));
+	}
+	
+	@Test
+	void updateAppliance_methodReturnsFalseWhenApplianceDoesNotExist() {
+		Optional<Appliance> optional = Optional.empty();
+		when(mockAppRepo.findById((long) 1)).thenReturn(optional);
+		
+		ApplianceService appService = new ApplianceService();
+		appService.setApplianceRepository(mockAppRepo);
+		Appliance app = new Appliance();
+		app.setId(1);
+		assertEquals(false, appService.updateAppliance(app));
+	}
+	
+	@Test
+	void updateAppliance_methodReturnsTrueWhenApplianceExists() {
+		Appliance app = new Appliance();
+		Optional<Appliance> optional = Optional.of(app);
+		when(mockAppRepo.findById((long) 1)).thenReturn(optional);
+		
+		ApplianceService appService = new ApplianceService();
+		appService.setApplianceRepository(mockAppRepo);
+		app.setId(1);
+		assertEquals(true, appService.updateAppliance(app));
 	}
 }
