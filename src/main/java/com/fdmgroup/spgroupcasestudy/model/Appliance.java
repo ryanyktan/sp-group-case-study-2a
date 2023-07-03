@@ -1,25 +1,35 @@
 package com.fdmgroup.spgroupcasestudy.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
 public class Appliance {
 
 	@Id
+	@GeneratedValue
 	private long id;
 	
 	private String serialNumber;
 	private String brand;
 	private String model;
 	private String status;
-	private LocalDateTime dateBought;
+	private LocalDate dateBought;
 	
 	public Appliance() {
 		super();
-		// TODO Auto-generated constructor stub
+	}
+
+	public Appliance(String serialNumber, String brand, String model, String status, LocalDate dateBought) {
+		super();
+		this.serialNumber = serialNumber;
+		this.brand = brand;
+		this.model = model;
+		this.status = status;
+		this.dateBought = dateBought;
 	}
 
 	public String getSerialNumber() {
@@ -54,11 +64,11 @@ public class Appliance {
 		this.status = status;
 	}
 
-	public LocalDateTime getDateBought() {
+	public LocalDate getDateBought() {
 		return dateBought;
 	}
 
-	public void setDateBought(LocalDateTime dateBought) {
+	public void setDateBought(LocalDate dateBought) {
 		this.dateBought = dateBought;
 	}
 
