@@ -28,10 +28,10 @@ public class ApplianceController {
 	}
 	
 	@PostMapping("/add-edit")
-	public ResponseEntity<Appliance> createAppliance(@RequestBody Appliance appliance) {
+	public ResponseEntity<Appliance> addEditAppliance(@RequestBody Appliance appliance) {
 		
 		
-		// TODO: figure out what happens when id field is blank. For now I have added this cast in to make the code compile.
+		// TODO: figure out what happens when id field is blank. For now assume id will be 0.
 		if (appliance.getId() == 0) {
 			Appliance createdAppliance = applianceService.createAppliance(appliance);
 			
@@ -58,7 +58,17 @@ public class ApplianceController {
 	}
 	
 	@PostMapping("/delete")
-	public String deleteAppliance() {
-		return null;
+	public ResponseEntity<Appliance> deleteAppliance(@RequestBody Appliance appliance) {
+		
+		
+		if (applianceService.deleteAppliance(appliance.getId())) {
+			
+			// 200 OK
+			return ResponseEntity.ok(appliance);
+		} else {
+			
+			// Fails when appliance is not found in database, so 404 Not Found
+			return ResponseEntity.notFound().build();
+		}
 	}
 }
