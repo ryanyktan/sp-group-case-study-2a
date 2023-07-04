@@ -68,6 +68,7 @@ public class ApplianceController {
 		
 	}
 	
+	// TODO: Change to deletemapping
 	@PostMapping("/delete")
 	public ResponseEntity<Object> deleteAppliance(@RequestBody Appliance appliance) {
 		
