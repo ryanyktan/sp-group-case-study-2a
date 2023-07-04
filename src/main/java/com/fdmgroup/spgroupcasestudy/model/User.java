@@ -1,7 +1,11 @@
 package com.fdmgroup.spgroupcasestudy.model;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class User {
@@ -11,6 +15,9 @@ public class User {
 	
 	private String username;
 	private String password;
+	
+	@OneToMany(mappedBy = "user")
+	private List<Appliance> appliances;
 	
 	public User() {
 		super();
