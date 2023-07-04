@@ -42,7 +42,7 @@ public class ApplianceService {
 	}
 	
 	/**
-	 * This service function deletes an appliance from the database if the appliance exists in the database.
+	 * This service function deletes an appliance from the database if the appliance exists in the database, and has inactive(old/unused/sold) status.
 	 * 
 	 * @param id
 	 * @return false if no such appliance exists, true if appliance exists and appliance is deleted
@@ -56,9 +56,17 @@ public class ApplianceService {
 			return false;
 			
 		} else {
-			
-			applianceRepository.delete(optionalAppliance.get());
-			return true;
+			// Make sure appliance is inactive
+			if (! optionalAppliance.get().getStatus().equalsIgnoreCase("active")) {
+				
+				applianceRepository.delete(optionalAppliance.get());			
+				return true;
+				
+			} else {
+				
+				return false;
+				
+			}
 		}
 	}
 	
@@ -83,4 +91,20 @@ public class ApplianceService {
 			return true;
 		}
 	}
+
+	/**
+	 * This function searches if an appliance already exists in the repository, by its serial number, brand and model.
+	 * 
+	 * @param appliance
+	 * @return false if it doesn't exist; true if it does exist.
+	 */
+	public boolean checkIfExists(Appliance appliance) {
+		if ( applianceRepository.findBySerialNumber_Brand_andModel(appliance.getSerialNumber(),
+				appliance.getBrand(), appliance.getModel()).size() == 0 ) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
 }

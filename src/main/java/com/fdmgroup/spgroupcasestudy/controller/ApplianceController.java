@@ -27,12 +27,21 @@ public class ApplianceController {
 		return applianceService.getAllAppliances();
 	}
 	
+	
+	
 	@PostMapping("/add-edit")
-	public ResponseEntity<Appliance> addEditAppliance(@RequestBody Appliance appliance) {
+	public ResponseEntity<Object> addEditAppliance(@RequestBody Appliance appliance) {
 		
-		
+		// If the id field in the form is blank, we treat the appliance as a new object
 		// TODO: figure out what happens when id field is blank. For now assume id will be 0.
 		if (appliance.getId() == 0) {
+			
+			// TODO: This should probably also check if the existing appliance found belongs to the logged in user.
+			// If the appliance already exists, display an error message.
+			if (applianceService.checkIfExists(appliance)) {
+				return ResponseEntity.badRequest().body("The appliance you are trying to add already exists.");
+			}
+			
 			Appliance createdAppliance = applianceService.createAppliance(appliance);
 			
 			URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}")
@@ -40,6 +49,8 @@ public class ApplianceController {
 			
 			// 201 Created
 			return ResponseEntity.created(location).body(applianceService.createAppliance(appliance));
+			
+		//If the id field is filled (automatically) then this is an update request.
 		} else {
 			if (applianceService.updateAppliance(appliance)) {
 
@@ -58,7 +69,7 @@ public class ApplianceController {
 	}
 	
 	@PostMapping("/delete")
-	public ResponseEntity<Appliance> deleteAppliance(@RequestBody Appliance appliance) {
+	public ResponseEntity<Object> deleteAppliance(@RequestBody Appliance appliance) {
 		
 		
 		if (applianceService.deleteAppliance(appliance.getId())) {
@@ -68,7 +79,7 @@ public class ApplianceController {
 		} else {
 			
 			// Fails when appliance is not found in database, so 404 Not Found
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.badRequest().body("Appliance either does not exist or is still active.");
 		}
 	}
 }
