@@ -18,27 +18,28 @@ public class UserService {
 	 * This function validates a user's credentials and checks if the application should log them in.
 	 * 
 	 * @param user The user object created by the login form.
-	 * @return true if there exists an identical user in the database, false if there does not.
+	 * @return an Optional which is empty whenever validation has failed, and which contains the validated user
+	 * if validation has succeeded.
 	 */
-	public boolean validateUserCredentials(User user) {
+	public Optional<User> validateUserCredentials(User user) {
 		Optional<User> dbOptionalUser = userRepo.findUserByUsername(user.getUsername());
 		
 		if (dbOptionalUser.isEmpty()) {
 			
-			// No user with such username exists
-			return false;
+			// No user with such username exists, return the empty optional
+			return dbOptionalUser;
 		} else {
 			
 			// User exists and passwords match
 			if (dbOptionalUser.get().getPassword().equals(user.getPassword())) {
 				
-				return true;
+				return dbOptionalUser;
 			}			
 			
 		}
 		
 		// User exists but passwords don't match
-		return false;
+		return Optional.empty();
 	}
 
 }

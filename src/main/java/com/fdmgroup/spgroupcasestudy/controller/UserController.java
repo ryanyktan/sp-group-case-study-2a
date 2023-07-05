@@ -1,5 +1,7 @@
 package com.fdmgroup.spgroupcasestudy.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,17 +24,19 @@ public class UserController {
 	/**
 	 * This function should receive a user object and log them in.
 	 * 
-	 * @param user
-	 * @return
+	 * @param user User to be logged in
+	 * @return 200 OK with the database user if log in is successful, 400 Bad Request if login is unsuccessful
 	 */
 	@PostMapping("/login")
-	public ResponseEntity<User> loginUser(@RequestBody User user) {
-		if (userService.validateUserCredentials(user)) {
+	public ResponseEntity<Object> loginUser(@RequestBody User user) {
+		Optional<User> dbUser = userService.validateUserCredentials(user);
+		if (dbUser.isPresent()) {
+			
 			// 200 OK
-			return ResponseEntity.ok(user);
+			return ResponseEntity.ok(dbUser.get());
 		}
 		
 		// 400 Bad Request
-		return ResponseEntity.badRequest().build();
+		return ResponseEntity.badRequest().body("Login unsuccessful, username or password was incorrect.");
 	}
 }

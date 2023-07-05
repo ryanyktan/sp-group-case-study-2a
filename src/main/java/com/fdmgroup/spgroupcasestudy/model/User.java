@@ -2,9 +2,9 @@ package com.fdmgroup.spgroupcasestudy.model;
 
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -13,6 +13,7 @@ public class User {
 	@Id
 	private long id;
 	
+	@Column(unique = true)
 	private String username;
 	private String password;
 	
