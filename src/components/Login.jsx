@@ -1,4 +1,4 @@
-import { Formik, useFormik } from "formik"
+import { Formik } from "formik"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 
@@ -19,7 +19,6 @@ const Login = () => {
                 setTimeout(() => {
 
                     setSubmitting(false)
-                    alert((JSON.stringify(values, null, 2)))
 
                     // This calls POST Mapping at the api url.
                     axios.post(loginapi, (JSON.stringify(values, null, 2)),{
@@ -31,6 +30,8 @@ const Login = () => {
                         response => {
                             // Successful login
                             alert("Login successful.")
+                            // Navigate to appliance
+                            navigate('/appliances')
                         }
                     ).catch(
                         error => {
