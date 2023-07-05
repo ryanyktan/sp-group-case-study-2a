@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +19,7 @@ import com.fdmgroup.spgroupcasestudy.service.ApplianceService;
 
 @RestController
 @RequestMapping("/api/appliances")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ApplianceController {
 
 	@Autowired
@@ -29,7 +32,7 @@ public class ApplianceController {
 	
 	
 	
-	@PostMapping("/add-edit")
+	@PostMapping
 	public ResponseEntity<Object> addEditAppliance(@RequestBody Appliance appliance) {
 		
 		// If the id field in the form is blank, we treat the appliance as a new object
@@ -68,8 +71,7 @@ public class ApplianceController {
 		
 	}
 	
-	// TODO: Change to deletemapping
-	@PostMapping("/delete")
+	@DeleteMapping
 	public ResponseEntity<Object> deleteAppliance(@RequestBody Appliance appliance) {
 		
 		
