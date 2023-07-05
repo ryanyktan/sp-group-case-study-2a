@@ -1,52 +1,71 @@
 import { Formik, useFormik } from "formik"
 import axios from "axios"
+import { useNavigate } from "react-router-dom"
 
 const Login = () => {
 
+    const navigate = useNavigate()
     const loginapi = 'http://localhost:9001/api/users/login'
-
-    // This method initialises and handles the form submission
-    const formik = useFormik({
-        initialValues: {
-            username: '',
-            password: '',
-        },
-        onSubmit: values => {
-            // This calls POST Mapping at the api url.
-            axios.post(loginapi, (JSON.stringify(values, null, 2))
-            ).then(
-                // Successful login
-                alert("Login successful.")
-            ).catch(
-                // Unsuccessful login
-                alert("Unsuccessful login, Username or password was incorrect.")
-            )
-        }
-    })
 
     return (
         <div>
-            <form onSubmit={formik.handleSubmit}> 
-                <label htmlFor="username">Username</label>
+            <Formik
+                initialValues={{
+                    username: '',
+                    password: '',
+                }}
+                onSubmit={(values, {setSubmitting} ) => {
+                    console.log("form submitted")
+                setTimeout(() => {
+
+                    setSubmitting(false)
+                    alert((JSON.stringify(values, null, 2)))
+
+                    // This calls POST Mapping at the api url.
+                    axios.post(loginapi, (JSON.stringify(values, null, 2)),{
+                        headers: {
+                          'Content-Type': 'application/json'
+                        }
+                      }
+                    ).then(
+                        response => {
+                            // Successful login
+                            alert("Login successful.")
+                        }
+                    ).catch(
+                        error => {
+                            // Unsuccessful login
+                            alert("Unsuccessful login, Username or password was incorrect.")
+                        }
+                    );
+                }, 1000);
+                }}
+            >
+                {props => 
+                    <form onSubmit={props.handleSubmit}> 
+                    <label htmlFor="username">Username</label>
                     <input
                      id="username"
                      name="username"
                      type="text"
-                     onChange={formik.handleChange}
-                     value={formik.values.username}
+                     onChange={props.handleChange}
+                     value={props.values.username}
                     />
-                <br />
-                <label htmlFor="password">Password</label>
+                    <br />
+                    <label htmlFor="password">Password</label>
                     <input
                      id="password"
                      name="password"
                      type="password"
-                     onChange={formik.handleChange}
-                     value={formik.values.password}
+                     onChange={props.handleChange}
+                     value={props.values.password}
                     />
-                <br />
-                <button type="submit">Submit</button>
-            </form>
+                    <br />
+                    <button type='submit'>Submit</button>
+                    </form>
+                }
+            
+            </Formik>
         </div>
     )
 }
