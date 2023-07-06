@@ -17,5 +17,7 @@ public interface ApplianceRepository extends JpaRepository<Appliance, Long> {
 			+ "AND a.brand = :brand AND a.model = :model", nativeQuery = true)
 	public List<Appliance> findBySerialNumber_Brand_andModel(@Param(value = "serialNumber") String serialNumber, 
 			@Param(value = "brand") String brand, @Param(value = "model") String model);
+
+	public List<Appliance> findApplianceByUserId(long userId);
 	
 }

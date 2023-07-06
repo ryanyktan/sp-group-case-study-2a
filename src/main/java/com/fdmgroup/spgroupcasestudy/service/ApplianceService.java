@@ -7,13 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.spgroupcasestudy.model.Appliance;
+import com.fdmgroup.spgroupcasestudy.model.User;
 import com.fdmgroup.spgroupcasestudy.repository.ApplianceRepository;
+import com.fdmgroup.spgroupcasestudy.repository.UserRepository;
 
 @Service
 public class ApplianceService {
 
 	@Autowired
 	ApplianceRepository applianceRepository;
+	
+	@Autowired
+	UserRepository userRepository;
 
 	//Purely for mockito testing
 	public void setApplianceRepository(ApplianceRepository applianceRepository) {
@@ -98,13 +103,26 @@ public class ApplianceService {
 	 * @param appliance
 	 * @return false if it doesn't exist; true if it does exist.
 	 */
-	public boolean checkIfExists(Appliance appliance) {
+	public boolean checkIfApplianceExists(Appliance appliance) {
 		if ( applianceRepository.findBySerialNumber_Brand_andModel(appliance.getSerialNumber(),
 				appliance.getBrand(), appliance.getModel()).size() == 0 ) {
 			return false;
 		} else {
 			return true;
 		}
+	}
+
+	public List<Appliance> getAllAppliancesForThisUser(long userId) {
+		return applianceRepository.findApplianceByUserId(userId);
+	}
+
+	public Appliance prepareApplianceForProcessing(Appliance appliance, long userId) {
+		Optional<User> optionalUser = userRepository.findUserById(userId);
+		
+		// No checks required since to get here, user has to log in from the front end which guarantees 
+		// that the find function will return a nonempty Optional.
+		appliance.setUser(optionalUser.get());
+		return appliance;
 	}
 	
 }
