@@ -3,7 +3,8 @@ import axios from "axios"
 
 const Appliances = () => {
 
-    const api = 'http://localhost:9001/api/appliances'
+    //TODO: Make api link depend on uri
+    const api = 'http://localhost:9001/api/appliances/1'
     const [message, setMessage] = useState('')
     const [appliances, setAppliances] = useState([])
 
@@ -11,7 +12,7 @@ const Appliances = () => {
         return axios.get(api).then(
             response => setAppliances(response.data)
         ).catch(
-            error => setMessage(error)
+            error => setMessage(error.data)
         )
     }
 
