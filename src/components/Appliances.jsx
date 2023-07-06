@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
+import { useParams } from "react-router-dom"
 
 const Appliances = () => {
 
-    //TODO: Make api link depend on uri
-    const api = 'http://localhost:9001/api/appliances/1'
+    const params = useParams()
+
+    const api = 'http://localhost:9001/api/appliances/' + params.userId
     const [message, setMessage] = useState('')
     const [appliances, setAppliances] = useState([])
 
@@ -20,6 +22,7 @@ const Appliances = () => {
         getAppliances()
     },[])
 
+    // TODO: Filtering in this table, buttons to update and delete appliances.
     return(
         <div>
             <p>{message}</p>

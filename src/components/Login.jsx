@@ -30,8 +30,9 @@ const Login = () => {
                         response => {
                             // Successful login
                             alert("Login successful.")
+
                             // Navigate to appliance
-                            navigate('/appliances')
+                            navigate('/appliances/' + response.data)
                         }
                     ).catch(
                         error => {
