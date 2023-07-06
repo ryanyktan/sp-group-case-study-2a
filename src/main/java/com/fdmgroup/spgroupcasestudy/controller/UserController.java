@@ -25,7 +25,7 @@ public class UserController {
 	 * This function should receive a user object and log them in.
 	 * 
 	 * @param user User to be logged in
-	 * @return 200 OK with the database user if log in is successful, 400 Bad Request if login is unsuccessful
+	 * @return 200 OK with the userId if log in is successful, 400 Bad Request if login is unsuccessful
 	 */
 	@PostMapping("/login")
 	public ResponseEntity<Object> loginUser(@RequestBody User user) {
@@ -33,7 +33,7 @@ public class UserController {
 		if (dbUser.isPresent()) {
 			
 			// 200 OK
-			return ResponseEntity.ok(dbUser.get());
+			return ResponseEntity.ok(dbUser.get().getId());
 		}
 		
 		// 400 Bad Request
