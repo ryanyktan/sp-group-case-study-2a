@@ -58,10 +58,8 @@ public class ApplianceController {
 		Appliance preparedAppliance = applianceService.prepareApplianceForProcessing(appliance, userId);
 		
 		// If the id field in the form is blank, we treat the appliance as a new object
-		// TODO: figure out what happens when id field is blank. For now assume id will be 0.
 		if (appliance.getId() == 0) {
 			
-			// TODO: This should probably also check if the existing appliance found belongs to the logged in user.
 			// If the appliance already exists, display an error message.
 			if (applianceService.checkIfApplianceExists(preparedAppliance)) {
 				return ResponseEntity.badRequest().body("The appliance you are trying to add already exists.");
