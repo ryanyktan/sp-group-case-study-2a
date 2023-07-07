@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Formik } from "formik";
 import { useState, useEffect } from "react";
+import '../styles/AddEditAppliance.css'
 
 // We use the same form to add/edit appliances, differentiating between the two by deciding to add when
 // the appId path variable is 0, and editing when the appId path variable is a valid one.
@@ -54,7 +55,7 @@ const AddEditAppliance = () => {
     }, [])
 
     return (
-        <div>
+        <div className="addEditContainer">
             <p>{errMessage}</p>
             <Formik
                 initialValues={{
@@ -158,7 +159,7 @@ const AddEditAppliance = () => {
             </Formik>
 
             <br />
-            <button onClick={() => goBack()}>Go Back to Appliance List</button>
+            <button className="goBackButton" onClick={() => goBack()}>Go Back to Appliance List</button>
         </div>
     )
 }
