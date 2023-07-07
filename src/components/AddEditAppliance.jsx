@@ -56,11 +56,11 @@ const AddEditAppliance = () => {
             <Formik
                 initialValues={{
                     id: appId,
-                    serialNumber: [isEdit ? appliance.serialNumber : ''],
-                    brand: [isEdit ? appliance.brand : ''],
-                    model: [isEdit ? appliance.model : ''],
-                    dateBought: [isEdit ? appliance.dateBought : ''],
-                    status: [isEdit ? appliance.status : ''],
+                    serialNumber: isEdit ? appliance.serialNumber : '',
+                    brand: isEdit ? appliance.brand : '',
+                    model: isEdit ? appliance.model : '',
+                    dateBought: isEdit ? appliance.dateBought : '',
+                    status: isEdit ? appliance.status : '',
                 }}
                 enableReinitialize = {true}
                 onSubmit={(values, {setSubmitting} ) => {
@@ -69,6 +69,8 @@ const AddEditAppliance = () => {
                 setTimeout(() => {
 
                     setSubmitting(false)
+
+                    console.log(JSON.stringify(values, null, 2))
 
                     // This calls POST Mapping at the api url.
                     axios.post(postApi, (JSON.stringify(values, null, 2)),{
