@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
-import { useParams } from "react-router-dom"
-import { useNavigate } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 
 const Appliances = () => {
 
@@ -79,7 +78,7 @@ const Appliances = () => {
                                     <button value="Update" onClick={() => updateAppliance(appliance.id)}>Update</button>
                                 </td>
                                 <td>
-                                <button value="Delete" onClick={() => deleteAppliance(appliance.id)}>Delete</button>
+                                    <button value="Delete" onClick={() => deleteAppliance(appliance.id)}>Delete</button>
                                 </td>
                             </tr>
                         )

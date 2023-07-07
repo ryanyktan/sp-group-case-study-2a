@@ -1,7 +1,8 @@
 # Installed Modules
 react-router-dom\
 axios\
-formik
+formik\
+react-table
 
 
 # Getting Started with Create React App
