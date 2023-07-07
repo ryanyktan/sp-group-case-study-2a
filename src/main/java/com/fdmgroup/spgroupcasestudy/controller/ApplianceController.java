@@ -2,6 +2,7 @@ package com.fdmgroup.spgroupcasestudy.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,19 @@ public class ApplianceController {
 	@GetMapping
 	public List<Appliance> getAllAppliances() {
 		return applianceService.getAllAppliances();
+	}
+	
+	@GetMapping("/get/{appId}")
+	public ResponseEntity<Object> getThisAppliance(@PathVariable long appId) {
+		Optional<Appliance> optionalAppliance = applianceService.findApplianceById(appId);
+		if (optionalAppliance.isEmpty()) {
+			
+			// This should really never happen if the application is used correctly
+			// 400 Bad Request
+			return ResponseEntity.badRequest().body("No such appliance with this id exists.");
+		} else {
+			return ResponseEntity.ok(optionalAppliance.get());
+		}
 	}
 	
 	@GetMapping("/{userId}")
@@ -88,7 +102,7 @@ public class ApplianceController {
 			return ResponseEntity.status(204).build();
 		} else {
 			
-			// Fails when appliance is not found in database, so 404 Not Found
+			// Fails when appliance is not found in database, so 400 Bad Request
 			return ResponseEntity.badRequest().body("Appliance either does not exist or is still active.");
 		}
 	}

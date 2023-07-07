@@ -124,5 +124,15 @@ public class ApplianceService {
 		appliance.setUser(optionalUser.get());
 		return appliance;
 	}
+
+	/**
+	 * This finds an appliance by its id number
+	 * 
+	 * @param appId
+	 * @return Optional<Appliance> which is empty when appliance doesn't exist and contains the appliance if it does exist.
+	 */
+	public Optional<Appliance> findApplianceById(long appId) {
+		return applianceRepository.findById(appId);
+	}
 	
 }
