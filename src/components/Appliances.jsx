@@ -7,25 +7,43 @@ const Appliances = () => {
 
     const params = useParams()
     const navigate = useNavigate()
+    const userId = params.userId
 
-    const api = 'http://localhost:9001/api/appliances/' + params.userId
+    const baseApi = 'http://localhost:9001/api/appliances/'
     const [message, setMessage] = useState('')
     const [appliances, setAppliances] = useState([])
 
+    // This function calls the get mapping to retrieve appliance data
     const getAppliances = () => {
-        return axios.get(api).then(
+        return axios.get(baseApi + userId).then(
             response => setAppliances(response.data)
         ).catch(
             error => setMessage(error.data)
         )
     }
 
+    // This function navigates the user to the add appliance form
     const addAppliance = () => {
         navigate('/appliances/' + params.userId + '/addedit/' + 0)
     }
 
+    // This function navigates the user to the update appliance form
     const updateAppliance = (id) => {
         navigate('/appliances/' + params.userId + '/addedit/' + id)
+    }
+
+    // This function calls the delete mapping to delete an appliance
+    const deleteAppliance = (id) => {
+        axios.delete(baseApi + id).then(
+            response => {
+                alert("Delete Success!")
+                getAppliances()
+            }
+        ).catch(
+            error => {
+                alert(error.data)
+            }
+        )
     }
 
     useEffect( () => {
@@ -59,6 +77,9 @@ const Appliances = () => {
                                 <td>{appliance.status}</td>
                                 <td>
                                     <button value="Update" onClick={() => updateAppliance(appliance.id)}>Update</button>
+                                </td>
+                                <td>
+                                <button value="Delete" onClick={() => deleteAppliance(appliance.id)}>Delete</button>
                                 </td>
                             </tr>
                         )

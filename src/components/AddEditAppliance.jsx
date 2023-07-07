@@ -3,6 +3,8 @@ import axios from "axios";
 import { Formik } from "formik";
 import { useState, useEffect } from "react";
 
+// We use the same form to add/edit appliances, differentiating between the two by deciding to add when
+// the appId path variable is 0, and editing when the appId path variable is a valid one.
 const AddEditAppliance = () => {
 
     const params = useParams()
@@ -34,6 +36,7 @@ const AddEditAppliance = () => {
             // This is the getmapping request to pull details of an existing appliance to be updated.
             axios.get(getApi).then(
                 response => {
+                    
                     // Before autofilling, first ensure that the appliance does indeed belong
                     // to the logged in user.
                     const apiapp = response.data
@@ -81,13 +84,13 @@ const AddEditAppliance = () => {
                     ).then(
                         response => {
                             // Successful appliance update
-                            alert("Update Success!")
+                            alert("Add/Update Success!")
                             navigate('/appliances/' + params.userId)
                         }
                     ).catch(
                         error => {
                             // Unsuccessful appliance update
-                            alert("Update was unsuccessful, please try again.")
+                            alert("Add/Update was unsuccessful, please try again.")
                         }
                     );
                 }, 1000);
