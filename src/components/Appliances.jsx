@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { useParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 const Appliances = () => {
 
     const params = useParams()
+    const navigate = useNavigate()
 
     const api = 'http://localhost:9001/api/appliances/' + params.userId
     const [message, setMessage] = useState('')
@@ -18,6 +20,14 @@ const Appliances = () => {
         )
     }
 
+    const addAppliance = () => {
+        navigate('/appliances/' + params.userId + '/addedit/' + 0)
+    }
+
+    const updateAppliance = (id) => {
+        navigate('/appliances/' + params.userId + '/addedit/' + id)
+    }
+
     useEffect( () => {
         getAppliances()
     },[])
@@ -25,6 +35,7 @@ const Appliances = () => {
     // TODO: Filtering in this table, buttons to update and delete appliances.
     return(
         <div>
+            <button onClick={addAppliance}>Add an appliance here</button>
             <p>{message}</p>
             <table>
                 <thead>
@@ -46,6 +57,9 @@ const Appliances = () => {
                                 <td>{appliance.serialNumber}</td>
                                 <td>{appliance.dateBought}</td>
                                 <td>{appliance.status}</td>
+                                <td>
+                                    <button value="Update" onClick={() => updateAppliance(appliance.id)}>Update</button>
+                                </td>
                             </tr>
                         )
                     }

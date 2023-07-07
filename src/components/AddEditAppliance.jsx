@@ -1,50 +1,94 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Formik } from "formik";
+import { useState, useEffect } from "react";
 
 const AddEditAppliance = () => {
 
     const params = useParams()
-    const api = 'http://localhost:9001/api/appliances/' + params.userId
+    const navigate = useNavigate()
+    const appId = params.appId
+    const userId = params.userId
+    
+    const getApi = 'http://localhost:9001/api/appliances/get/' + appId
+    const postApi = 'http://localhost:9001/api/appliances/' + params.userId
+    const [isEdit, setIsEdit] = useState(false)
+    const [errMessage, setErrMessage] = useState('')
+    const [appliance, setAppliance] = useState(null) 
+
+    const goBack = () => {
+        navigate('/appliances/' + userId)
+    }
+
+    // This runs when the page loads
+    useEffect( () => {
+        console.log("use effect running")
+        console.log(appId == 0)
+
+        // If the appId path varible is set to 0, the form is used to add an appliance.
+        // Otherwise, we are modifying an existing appliance and will autofill the form
+        // with the current details of the appliance
+        if (appId != 0) {
+            console.log("get request sent")
+
+            // This is the getmapping request to pull details of an existing appliance to be updated.
+            axios.get(getApi).then(
+                response => {
+                    // Before autofilling, first ensure that the appliance does indeed belong
+                    // to the logged in user.
+                    const apiapp = response.data
+                    if (apiapp.user.id == userId) {
+                        setAppliance(response.data)
+                        setIsEdit(true)
+                    }
+                }
+            ).catch(
+                error => {
+                    setErrMessage(error.data)
+                }
+            )
+        }
+    }, [])
 
     return (
         <div>
+            <p>{errMessage}</p>
             <Formik
                 initialValues={{
-                    id: 0,
-                    serialNumber: '',
-                    brand: '',
-                    model: '',
-                    dateBought: '',
-                    status: '',
-                    userId: params.userId,
+                    id: appId,
+                    serialNumber: [isEdit ? appliance.serialNumber : ''],
+                    brand: [isEdit ? appliance.brand : ''],
+                    model: [isEdit ? appliance.model : ''],
+                    dateBought: [isEdit ? appliance.dateBought : ''],
+                    status: [isEdit ? appliance.status : ''],
                 }}
+                enableReinitialize = {true}
                 onSubmit={(values, {setSubmitting} ) => {
                     console.log("form submitted")
 
-                    alert(JSON.stringify(values, null, 2))
+                setTimeout(() => {
 
-                // setTimeout(() => {
+                    setSubmitting(false)
 
-                //     setSubmitting(false)
-
-                //     // This calls POST Mapping at the api url.
-                //     axios.post(api, (JSON.stringify(values, null, 2)),{
-                //         headers: {
-                //           'Content-Type': 'application/json'
-                //         }
-                //       }
-                //     ).then(
-                //         response => {
-                //             // Successful appliance update
-                //         }
-                //     ).catch(
-                //         error => {
-                //             // Unsuccessful appliance update
-                //             alert("Unsuccessful login, Username or password was incorrect.")
-                //         }
-                //     );
-                // }, 1000);
+                    // This calls POST Mapping at the api url.
+                    axios.post(postApi, (JSON.stringify(values, null, 2)),{
+                        headers: {
+                          'Content-Type': 'application/json'
+                        }
+                      }
+                    ).then(
+                        response => {
+                            // Successful appliance update
+                            alert("Update Success!")
+                            navigate('/appliances/' + params.userId)
+                        }
+                    ).catch(
+                        error => {
+                            // Unsuccessful appliance update
+                            alert("Update was unsuccessful, please try again.")
+                        }
+                    );
+                }, 1000);
                 }}
             >
                 {props => 
@@ -55,12 +99,6 @@ const AddEditAppliance = () => {
                      name="id"
                      type="hidden"
                      value={props.values.id}
-                    />
-                    <input
-                     id="userId"
-                     name="userId"
-                     type="hidden"
-                     value={props.values.userId}
                     />
 
                     <label htmlFor="serialNumber">Serial Number</label>
@@ -94,7 +132,7 @@ const AddEditAppliance = () => {
                     <input
                      id="dateBought"
                      name="dateBought"
-                     type="text"
+                     type="date"
                      onChange={props.handleChange}
                      value={props.values.dateBought}
                     />
@@ -113,6 +151,9 @@ const AddEditAppliance = () => {
                 }
             
             </Formik>
+
+            <br />
+            <button onClick={() => goBack()}>Go Back to Appliance List</button>
         </div>
     )
 }
