@@ -48,7 +48,7 @@ const AddEditAppliance = () => {
                 }
             ).catch(
                 error => {
-                    setErrMessage(error.data)
+                    setErrMessage(error.response.data)
                 }
             )
         }

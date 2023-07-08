@@ -33,7 +33,7 @@ const Appliances = () => {
     return axios.get(baseApi + userId).then(
       response => setAppliances(response.data)
     ).catch(
-      error => setMessage(error.message)
+      error => setMessage(error.response.data)
     );
   }
 
@@ -53,7 +53,7 @@ const Appliances = () => {
       }
     ).catch(
       error => {
-        alert(error.message);
+        alert(error.response.data);
       }
     );
   }
