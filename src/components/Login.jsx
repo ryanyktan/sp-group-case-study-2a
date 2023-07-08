@@ -1,6 +1,7 @@
 import { Formik } from "formik"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import '../styles/Login.css'
 
 const Login = () => {
 
@@ -8,7 +9,7 @@ const Login = () => {
     const loginapi = 'http://localhost:9001/api/users/login'
 
     return (
-        <div>
+        <div className="loginContainer">
             <Formik
                 initialValues={{
                     username: '',
